@@ -36,11 +36,12 @@ public class Modelo {
 	 */
 	private ILista<Categoria> categorias;
 	private ILista<YoutubeVideo> datos;
-	
+	private Ordenamiento<YoutubeVideo> o;
 	public Modelo()
 	{
 		datos = new ArregloDinamico<YoutubeVideo>();
 		categorias = new ArregloDinamico<Categoria>();
+		o = new Ordenamiento<YoutubeVideo>();
 	}	
 	
 	/**
@@ -135,7 +136,7 @@ public class Modelo {
 		for (CSVRecord record : records) {
 			String n = record.get(0);
 			if(!n.equals("id	name")){
-				String[] x = n.split("	");
+				String[] x = n.split("	 ");
 				Categoria nueva =  new Categoria(Integer.parseInt(x[0]), x[1]);
 				agregarCategoria(nueva);
 			}
@@ -178,6 +179,44 @@ public class Modelo {
 		}
 		}
 		return categorias.getElement(elem);
+	}
+	
+	/**
+	 * Metodo que realiza una sublista de paises
+	 * @param Pais del cual se desea realizar la sublisa, Pais!=null, Pais!=""
+	 * @return ILista<YoutubeVideo> 
+	 */
+	public ArregloDinamico<YoutubeVideo> sublistaPais(String pais){
+		ArregloDinamico<YoutubeVideo> nueva = new ArregloDinamico<YoutubeVideo>();
+		for(int i=1; i<=datos.size(); i++){
+			if(datos.getElement(i).darPais().compareToIgnoreCase((pais))==0)
+				nueva.addLast(datos.getElement(i)); 
+		}
+		return nueva;
+	}
+	
+	public ILista<YoutubeVideo> req1(String pais, int num, String categoria){
+		int c = 0;
+		boolean stop = false;
+		//Determinar el id de la categoria O(N) 
+		for(int i=1; i<=categorias.size()&&!stop;i++){
+			Categoria actual = categorias.getElement(i);
+			if(actual.darNombre().compareTo(categoria)==0){
+				c = actual.darId();
+				stop = true;
+			}
+		}
+		
+		//Arreglo con la lista de paises
+		ArregloDinamico<YoutubeVideo> p= sublistaPais(pais);
+		Comparator<YoutubeVideo> comp = new YoutubeVideo.ComparadorXViews();
+		o.ordenarMerge(p, comp, false);
+		
+		//Resultado final
+		p = p.sublista(c);
+		return p;
+		
+		
 	}
 }
 

@@ -66,6 +66,14 @@ public class Controller {
 					break;
 
 				case 2:
+					view.printMessage("--------- \nSeleccione el requerimiento: ");
+					dato = lector.next();
+					if(dato.equals("1")){
+						view.printMessage("Ingrese un país, numero y categoria(Str,int,str):");
+						dato = lector.next();
+						String[] i = dato.split(",");
+						view.printPrimerosYUltimos(modelo.req1(i[0],Integer.parseInt(i[1]),i[2]));
+					}
 				break;
 
 				case 3:

@@ -310,7 +310,7 @@ public class YoutubeVideo implements Comparable<YoutubeVideo>  {
 	/** Comparaciï¿½n natural de acuerdo a algï¿½n atributo con identificaciï¿½n ï¿½nica
 	 * @return valor 0 si this y otro son iguales. Numero negativo si this es menor a otro. 
 	 * Numero positivo this es mayor a otro */
-	public int compareTo1(YoutubeVideo otro)
+	public int compareToLikes(YoutubeVideo otro)
 	{
 		int x = 0;
 		if(darLikes() == otro.darLikes()){
@@ -325,6 +325,21 @@ public class YoutubeVideo implements Comparable<YoutubeVideo>  {
 		return x;
 	}
 	
+	public int compareToViews(YoutubeVideo otro)
+	{
+		int x = 0;
+		if(darViews() == otro.darViews()){
+			x = 0;
+		}
+		else if(darViews() < otro.darViews()){
+			x = -1;
+		}
+		else if(darViews() > otro.darViews()){
+			x = 1;
+		}
+		return x;
+	}
+	
 	// Comparador alterno de acuerdo al nï¿½mero de likes
 	 public static class ComparadorXLikes implements Comparator<YoutubeVideo> {
 
@@ -334,7 +349,19 @@ public class YoutubeVideo implements Comparable<YoutubeVideo>  {
 	*valor positivo si video1 tiene mï¿½s likes que video2. 
 	*/
 		 public int compare(YoutubeVideo video1 , YoutubeVideo video2) {
-			 return video1.compareTo1(video2);
+			 return video1.compareToLikes(video2);
 		 }
 	}
+	// Comparador alterno de acuerdo al número de views
+		 public static class ComparadorXViews implements Comparator<YoutubeVideo> {
+
+		/** Comparador alterno de acuerdo al nï¿½mero de views
+		* @return valor 0 si video1 y video2 tiene los mismos views.
+		*valor negativo si video1 tiene menos views que video2.
+		*valor positivo si video1 tiene mï¿½s views que video2. 
+		*/
+			 public int compare(YoutubeVideo video1 , YoutubeVideo video2) {
+				 return video1.compareToViews(video2);
+			 }
+		}
 }
