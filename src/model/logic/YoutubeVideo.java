@@ -9,7 +9,7 @@ import model.data_structures.NodoLista;
  * @author Juan Camilo
  *
  */
-public class YoutubeVideo implements Comparable<YoutubeVideo> {
+public class YoutubeVideo implements Comparable<YoutubeVideo>  {
 
 	private String videoID;
 	private Date fechaT;

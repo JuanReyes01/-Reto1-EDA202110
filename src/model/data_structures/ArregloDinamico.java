@@ -41,77 +41,7 @@ public class ArregloDinamico<T extends Comparable<T>> implements ILista<T> {
                tamanoMax = 1;
                tamanoAct = 0;
         }
- /**------------------------------------------------------
-  * Implementación original       
-  * ------------------------------------------------------
-		public void agregar( T dato )
-        {
-               if ( tamanoAct == tamanoMax )
-               {  // caso de arreglo lleno (aumentar tamaNo)
-                    tamanoMax = 2 * tamanoMax;
-                    T[ ] copia = elementos;
-                    elementos = (T[]) new Comparable[tamanoMax];
-                    for ( int i = 0; i < tamanoAct; i++)
-                    {
-                     	 elementos[i] = copia[i];
-                    } 
-            	    System.out.println("Arreglo lleno: " + tamanoAct + " - Arreglo duplicado: " + tamanoMax);
-               }	
-               elementos[tamanoAct] = dato;
-               tamanoAct++;
-       }
-
-		public int darCapacidad() {
-			return tamanoMax;
-		}
-
-		public int darTamano() {
-			return tamanoAct;
-		}
-
-		public T darElemento(int i) {
-			return elementos[i];			
-			// TODO implementar
-		}
-
-		public T buscar(T dato) {
-			// TODO implementar
-			// Recomendacion: Usar el criterio de comparacion natural (metodo compareTo()) definido en Strings.
-			T retorno=null;
-			boolean stop=false;
-			for(int i=0; i<elementos.length&&!stop; i++)
-				if(elementos[i].equals(dato)){
-					retorno = elementos[i];
-					stop=true;
-				}
-				else{
-					retorno = null;
-				}
-			return retorno;
-		}
-
-		public T eliminar(T dato) {
-			// TODO implementar
-			// Recomendacion: Usar el criterio de comparacion natural (metodo compareTo()) definido en Strings.
-			T eliminado=null;
-			T[] nuevo = (T[]) new Comparable[elementos.length]; 			
-			int j = 0;
-			for(int i=0; i<elementos.length; i++){
-				if(elementos[i]!=null&&elementos[i].equals(dato)){
-					eliminado = elementos[i];					
-				}
-				else if(elementos[i]!=null){
-					nuevo[j] = elementos[i];
-					j++;
-				}
-				}
-			
-				tamanoAct = tamanoAct-1;
-				elementos = nuevo;
-			
-			return eliminado;
-		}
-
+ /**
 		public void invertir() {
 			T[] invertida = ( T[]) new Comparable[elementos.length];
 			for(int i=tamanoAct; i>0;i--){
@@ -132,7 +62,7 @@ public void addFirst(T element) {
         {
          	 elementos[i] = copia[i];
         } 
-	    System.out.println("Arreglo lleno: " + tamanoAct + " - Arreglo duplicado: " + tamanoMax);
+	    //System.out.println("Arreglo lleno: " + tamanoAct + " - Arreglo duplicado: " + tamanoMax);
    }	
    elementos[0] = element;
    int j = 1;
@@ -155,7 +85,7 @@ public void addLast(T element) {
         {
          	 elementos[i] = copia[i];
         } 
-	    System.out.println("Arreglo lleno: " + tamanoAct + " - Arreglo duplicado: " + tamanoMax);
+	    //System.out.println("Arreglo lleno: " + tamanoAct + " - Arreglo duplicado: " + tamanoMax);
    }	
    elementos[tamanoAct] = element;
    tamanoAct++;
@@ -173,7 +103,7 @@ public void insertElement(T element, int pos) {
         {
          	 elementos[i] = copia[i];
         } 
-	    System.out.println("Arreglo lleno: " + tamanoAct + " - Arreglo duplicado: " + tamanoMax);
+	    //System.out.println("Arreglo lleno: " + tamanoAct + " - Arreglo duplicado: " + tamanoMax);
     }
 	tamanoAct++;
 	T[] nuevo = (T[]) new Comparable[tamanoAct];

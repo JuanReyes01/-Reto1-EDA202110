@@ -1,6 +1,6 @@
 package model.logic;
 
-public class Categoria {
+public class Categoria implements Comparable<Categoria>{
 	private int id;
 	private String nombre;
 	public Categoria(int id, String nm) {
@@ -14,5 +14,9 @@ public class Categoria {
 	
 	public int darId(){
 		return id;
+	}
+
+	public int compareTo(Categoria o) {
+		return this.id-o.darId();
 	}
 }

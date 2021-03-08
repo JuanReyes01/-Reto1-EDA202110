@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
@@ -33,21 +34,14 @@ public class Modelo {
 	/**
 	 * Atributos del modelo del mundo
 	 */
+	private ILista<Categoria> categorias;
 	private ILista<YoutubeVideo> datos;
 	
 	public Modelo()
-	{	
-	}
-	
-	public void inicializarEstructuras(int tipoLista){
-		if(tipoLista==0){
-			datos = new ArregloDinamico<YoutubeVideo>();			
-		}
-		else if(tipoLista==1){			
-			datos = new ListaEncadenada<YoutubeVideo>();
-		}
-	}
-	
+	{
+		datos = new ArregloDinamico<YoutubeVideo>();
+		categorias = new ArregloDinamico<Categoria>();
+	}	
 	
 	/**
 	 * Servicio de consulta de numero de elementos presentes en el modelo 
@@ -57,6 +51,7 @@ public class Modelo {
 	{
 		return datos.size();
 	}
+	
 
 	/**
 	 * Requerimiento de agregar dato
@@ -96,37 +91,6 @@ public class Modelo {
 		return datos;
 	}
 	
-	public long ordenar(int alg){
-		long start = 0;
-		long stop = 0;
-		Ordenamiento<YoutubeVideo> o  = new Ordenamiento<YoutubeVideo>();
-		ILista<YoutubeVideo> subListaVideos = datos.sublista(1000);
-		Comparator<YoutubeVideo> comparadorXLikes = new YoutubeVideo.ComparadorXLikes();
-		if(alg==1){
-			start = System.currentTimeMillis();
-			datos = o.ordenarInsercion(subListaVideos, comparadorXLikes, true);
-			stop = System.currentTimeMillis();
-		}
-		if(alg==2){
-			start = System.currentTimeMillis();
-			datos = o.ordenarShell(subListaVideos, comparadorXLikes, true);
-			stop = System.currentTimeMillis();
-		}
-		if(alg==3){
-			start = System.currentTimeMillis();
-			datos = o.ordenarMerge(subListaVideos, comparadorXLikes, true);
-			stop = System.currentTimeMillis();
-		}
-		if(alg==4){
-			start = System.currentTimeMillis();
-			datos = o.ordenarQuickSort(subListaVideos, comparadorXLikes, true);
-			stop = System.currentTimeMillis();
-		}
-		
-		return stop-start;
-	}
-
-	
 	public String cargarDatos() throws IOException, ParseException{
 		long miliI = System.currentTimeMillis();
 		Reader in = new FileReader("./data/videos-small.csv");
@@ -137,7 +101,7 @@ public class Modelo {
 		    String trending = record.get(1);
 		    String titulo = record.get(2);
 		    String canal = record.get(3);
-		    String categoria = record.get(4);
+		    String YoutubeVideo = record.get(4);
 		    String fechaP = record.get(5);
 		    String tags = record.get(6);
 		    String vistas = record.get(7);
@@ -157,7 +121,7 @@ public class Modelo {
 		    Date fechaT = formato.parse(aux[0]+"/"+aux[2]+"/"+aux[1]);
 		    SimpleDateFormat formato2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");		   
 		    Date fechaPu = formato2.parse(fechaP);
-		    YoutubeVideo nuevo = new YoutubeVideo(id, fechaT, titulo, canal, Integer.parseInt(categoria), fechaPu, tags, Integer.parseInt(vistas), Integer.parseInt(likes), Integer.parseInt(dislikes), Integer.parseInt(coment), foto, (nComent.equals("FALSE")?false:true), (rating.equals("FALSE")?false:true), (vidErr.equals("FALSE")?false:true), descripcion, pais);
+		    YoutubeVideo nuevo = new YoutubeVideo(id, fechaT, titulo, canal, Integer.parseInt(YoutubeVideo), fechaPu, tags, Integer.parseInt(vistas), Integer.parseInt(likes), Integer.parseInt(dislikes), Integer.parseInt(coment), foto, (nComent.equals("FALSE")?false:true), (rating.equals("FALSE")?false:true), (vidErr.equals("FALSE")?false:true), descripcion, pais);
 		    agregar(nuevo);
 		    }
 		}
@@ -165,18 +129,57 @@ public class Modelo {
 		return "Tiempo de ejecución total: "+((miliF-miliI))+" milisegundos, \nTotal datos cargados: "+ datos.size();
 	}
 
-	public  cargarId() throws IOException, FileNotFoundException{
+	public void cargarId() throws IOException, FileNotFoundException{
 		Reader in = new FileReader("./data/category-id.csv");
 		Iterable<CSVRecord> records = CSVFormat.EXCEL.parse(in);	
 		for (CSVRecord record : records) {
 			String n = record.get(0);
-			if(!n.equals("idname")){
-				String[] x = n.split("    ");
-				Categoria nueva =  x[0]
+			if(!n.equals("id	name")){
+				String[] x = n.split("	");
+				Categoria nueva =  new Categoria(Integer.parseInt(x[0]), x[1]);
+				agregarCategoria(nueva);
 			}
-			
 		}
-	}
 		
+	}
 	
+	public ILista<Categoria> darCategorias(){
+		return categorias;
+	}
+	
+	public void agregarCategoria(Categoria elem){
+		categorias.addLast(elem);
+	}
+	
+	/**
+	 * Metodo que sobreescribe la busqueda que realiza arreglo dinamico con una busqueda binaria
+	 * Esto es posible porque la lista de categorias esta ordenada desde que se carga 
+	 */
+	public Categoria buscarCategoriaBin(int pos){
+		int i = 1;
+		int f = categorias.size();
+		int elem = -1;
+		boolean encontro = false;
+		while ( i <= f && !encontro )
+		{
+		int m = (i + f) / 2;
+		if ( categorias.getElement(m).darId() == pos )
+		{
+		elem = m;
+		encontro = true;
+		}
+		else if ( categorias.getElement(m).darId() > pos )
+		{
+		f = m - 1;
+		}
+		else
+		{
+		i = m + 1;
+		}
+		}
+		return categorias.getElement(elem);
+	}
 }
+
+
+		

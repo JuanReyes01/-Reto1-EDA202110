@@ -1,5 +1,7 @@
 package view;
 
+import model.data_structures.ILista;
+import model.logic.Categoria;
 import model.logic.Modelo;
 
 public class View 
@@ -35,7 +37,7 @@ public class View
 			a = a.trim();
 			a+="]";
 			System.out.println(a);
-			// TODO implementar
+		
 		}
 		
 		public void printPrimerosYUltimos(Modelo modelo)
@@ -51,5 +53,12 @@ public class View
 				System.out.println(modelo.darArreglo().getElement(i).darTitulo()+": "+modelo.darArreglo().getElement(i).darLikes());
 			}
 			System.out.println("===================================================================================");
+		}
+		
+		public void printCategorias(Modelo modelo){
+			ILista<Categoria> l = modelo.darCategorias();
+			for(int i=1; i<=l.size();i++){
+				System.out.println(l.getElement(i).darNombre()+": "+l.getElement(i).darId());
+			}
 		}
 }

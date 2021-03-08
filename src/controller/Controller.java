@@ -42,7 +42,6 @@ public class Controller {
 			switch(option){
 				case 1:
 					view.printMessage("Cargando datos en el sistema...");
-					modelo.inicializarEstructuras(0);
 					String r;
 				try {
 					r = modelo.cargarDatos();
@@ -56,13 +55,14 @@ public class Controller {
 							+" \n Likes: "+modelo.darArreglo().firstElement().darLikes()
 							+" \n Dislikes: "+modelo.darArreglo().firstElement().darDislikes());
 					view.printMessage("-------");
+					modelo.cargarId();
+					view.printCategorias(modelo);
 				} catch (IOException e) {
 					
 					e.printStackTrace();
 				} catch (ParseException e) {
 					e.printStackTrace();
-				}							
-					
+				}											
 					break;
 
 				case 2:
@@ -76,17 +76,6 @@ public class Controller {
 					break;
 
 				case 4:
-					view.printMessage("--------- \nSeleccione cual tipo de algoritmo quiere utilizar");
-					view.printMessage("=>1. Insertion sort\n=>2. Shell Sort\n=>3.Merge Sort\n=>4.Quick Sort");
-					dato = lector.next();
-					view.printMessage("Algoritmo seleccionado: "+ (dato.equals("1")?"Insertion sort":
-																 (dato.equals("2")?"Shell sort":
-																 (dato.equals("3")?"Merge sort":
-																  "Quick sort"))));
-					long tiempo = modelo.ordenar(Integer.parseInt(dato));
-					view.printMessage("Lista Ordenada!");
-					view.printMessage("Tiempo de ejecución total: " + tiempo+ " milisegundos");
-					view.printPrimerosYUltimos(modelo);
 					break;
 
 				case 5: 
