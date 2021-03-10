@@ -3,6 +3,7 @@ package view;
 import model.data_structures.ILista;
 import model.logic.Categoria;
 import model.logic.Modelo;
+import model.logic.YoutubeVideo;
 
 public class View 
 {
@@ -40,18 +41,18 @@ public class View
 		
 		}
 		
-		public void printPrimerosYUltimos(Modelo modelo)
+		public void printPrimerosYUltimos(ILista<YoutubeVideo> l)
 		{
 			System.out.println("===================================================================================");
 			System.out.println("Primeros 10 elementos:");
 			for(int i=1; i<=10; i++){
-				System.out.println(modelo.darArreglo().getElement(i).darTitulo()+": "+modelo.darArreglo().getElement(i).darLikes());
+				System.out.println(l.getElement(i).darTitulo()+": "+l.getElement(i).darLikes());
 			}
 			System.out.println("===================================================================================");
 			System.out.println("Ultimos 10 elementos:");
-			for(int i=modelo.darTamano();i>=(modelo.darTamano()-10);i--){
-				System.out.println(modelo.darArreglo().getElement(i).darTitulo()+": "+modelo.darArreglo().getElement(i).darLikes());
-			}
+			for(int i=l.size();i>=(l.size()-10);i--){
+				System.out.println(l.getElement(i).darTitulo()+": "+l.getElement(i).darLikes());
+				}
 			System.out.println("===================================================================================");
 		}
 		

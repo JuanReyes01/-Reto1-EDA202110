@@ -66,6 +66,30 @@ public class Controller {
 					break;
 
 				case 2:
+					view.printMessage("--------- \nSeleccione el requerimiento: ");
+					dato = lector.next();
+					if(dato.equals("1")){
+						view.printMessage("Ingrese un país, numero y categoria(Str,int,str):");
+						dato = lector.next();
+						String[] i = dato.split(",");
+						view.printPrimerosYUltimos(modelo.req1(i[0],Integer.parseInt(i[1]),i[2]));
+					}
+					else if(dato.equals("2")){
+						view.printMessage("Ingrese un pais:");
+						dato = lector.next();
+						view.printPrimerosYUltimos(modelo.req2(dato));
+					}
+					else if(dato.equals("3")){
+						view.printMessage("Ingrese una categoria:");
+						dato = lector.next();
+						view.printPrimerosYUltimos(modelo.req3(dato));
+					}
+					else if(dato.equals("4")){
+						view.printMessage("Ingrese un país, numero y etiqueta(Str,int,str):");
+						dato = lector.next();
+						String[] i = dato.split(",");
+						view.printPrimerosYUltimos(modelo.req4(i[0],Integer.parseInt(i[1]),i[2]));
+					}
 				break;
 
 				case 3:
