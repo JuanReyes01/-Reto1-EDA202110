@@ -18,9 +18,7 @@ public class View
 		public void printMenu()
 		{
 			System.out.println("1. Inicializar estructuras de datos");
-			System.out.println("2. Cargar datos del archivo CSV");
-			System.out.println("3. Obtener una muestra de los videos");
-			System.out.println("4. Organizar el arreglo");
+			System.out.println("2. Requerimientos");
 			System.out.println("5. Exit");
 			System.out.println("Dar el numero de opcion a resolver, luego oprimir tecla Return: (e.g., 1):");
 		}
@@ -41,21 +39,28 @@ public class View
 		
 		}
 		
-		public void printPrimerosYUltimos(ILista<YoutubeVideo> l)
-		{
-			System.out.println("===================================================================================");
-			System.out.println("Primeros 10 elementos:");
-			for(int i=1; i<=10; i++){
-				System.out.println(l.getElement(i).darTitulo()+": "+l.getElement(i).darLikes());
+		/**
+		 * Metodo que imprime una tabla con la informacion del video, se imprime desde el primero hasta s.
+		 * @param l, lista de los videos que se quieren imprimir.
+		 * @param s, numero de videos de la lista que se quieren imprimir
+		 */
+		public void imprimirVideo(ILista<YoutubeVideo> l, int s){
+			System.out.println("=====================================");
+			System.out.println("LISTA VIDEOS:");
+			System.out.println("=====================================");
+			for(int i=1;i<=s;i++){
+				YoutubeVideo a = (YoutubeVideo) l.getElement(i); 
+				System.out.println("Video #"+i);
+				System.out.println(" tending_date: "+a.darFechaT());
+				System.out.println(" title: "+a.darTitulo());
+				System.out.println(" cannel_title: "+a.darCanal());
+				System.out.println(" publish_time: "+a.darFechaP());
+				System.out.println(" views: "+a.darViews());
+				System.out.println(" likes: "+a.darLikes());
+				System.out.println(" dislikes: "+a.darDislikes());
 			}
-			System.out.println("===================================================================================");
-			System.out.println("Ultimos 10 elementos:");
-			for(int i=l.size();i>=(l.size()-10);i--){
-				System.out.println(l.getElement(i).darTitulo()+": "+l.getElement(i).darLikes());
-
-			}
-			System.out.println("===================================================================================");
-			}
+			System.out.println("=====================================");
+		}
 
 		
 		

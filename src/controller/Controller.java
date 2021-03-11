@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import model.data_structures.ILista;
 import model.logic.Modelo;
+import model.logic.YoutubeVideo;
 import view.View;
 
 public class Controller {
@@ -72,35 +73,29 @@ public class Controller {
 						view.printMessage("Ingrese un país, numero y categoria(Str,int,str):");
 						dato = lector.next();
 						String[] i = dato.split(",");
-						view.printPrimerosYUltimos(modelo.req1(i[0],Integer.parseInt(i[1]),i[2]));
+						ILista<YoutubeVideo> r1 = modelo.req1(i[0].replace("-"," ").trim(),Integer.parseInt(i[1]),i[2].replace("-"," ").trim());
+						if(r1!=null)
+							view.imprimirVideo(r1,r1.size());
 					}
 					else if(dato.equals("2")){
 						view.printMessage("Ingrese un pais:");
 						dato = lector.next();
-						view.printPrimerosYUltimos(modelo.req2(dato));
+						view.printMessage(modelo.req2(dato.replace("-"," ").trim()));
 					}
 					else if(dato.equals("3")){
 						view.printMessage("Ingrese una categoria:");
 						dato = lector.next();
-						view.printPrimerosYUltimos(modelo.req3(dato));
+						view.printMessage(modelo.req3(dato.replace("-"," ").trim()));
 					}
 					else if(dato.equals("4")){
 						view.printMessage("Ingrese un país, numero y etiqueta(Str,int,str):");
 						dato = lector.next();
 						String[] i = dato.split(",");
-						view.printPrimerosYUltimos(modelo.req4(i[0],Integer.parseInt(i[1]),i[2]));
+						ILista<YoutubeVideo> r1 = modelo.req4(i[0].replace("-"," ").trim(),Integer.parseInt(i[1]),i[2].replace("-"," ").trim());
+						if(r1!=null)
+							view.imprimirVideo(modelo.req4(i[0],Integer.parseInt(i[1]),i[2]),modelo.req4(i[0],Integer.parseInt(i[1]),i[2]).size());
 					}
 				break;
-
-				case 3:
-					view.printMessage("--------- \nDar tamaño de la nueva sublista:");
-					dato = lector.next();
-					ILista nuevo = modelo.subLista(Integer.parseInt(dato));
-					view.printMessage("Copia exitosa. \nTamaño de la nueva lista: "+nuevo.size()+"\n---------");
-					break;
-
-				case 4:
-					break;
 
 				case 5: 
 					view.printMessage("--------- \n Hasta pronto !! \n---------"); 

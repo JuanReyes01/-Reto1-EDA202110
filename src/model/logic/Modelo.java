@@ -31,6 +31,7 @@ import model.utils.Ordenamiento;
  *
  */
 public class Modelo {
+	private static final String VIDEO = "./data/videos-all.csv";
 	/**
 	 * Atributos del modelo del mundo
 	 */
@@ -94,7 +95,7 @@ public class Modelo {
 	
 	public String cargarDatos() throws IOException, ParseException{
 		long miliI = System.currentTimeMillis();
-		Reader in = new FileReader("./data/videos-small.csv");
+		Reader in = new FileReader(VIDEO);
 		
 		Iterable<CSVRecord> records = CSVFormat.EXCEL.parse(in);	
 		for (CSVRecord record : records) {
@@ -137,7 +138,7 @@ public class Modelo {
 			String n = record.get(0);
 			if(!n.equals("id	name")){
 				String[] x = n.split("	 ");
-				Categoria nueva =  new Categoria(Integer.parseInt(x[0]), x[1]);
+				Categoria nueva =  new Categoria(Integer.parseInt(x[0]), x[1].trim());
 				agregarCategoria(nueva);
 			}
 		}
@@ -181,16 +182,12 @@ public class Modelo {
 		return categorias.getElement(elem);
 	}
 
-	/**
-	 * Metodo que realiza una sublista de paises
-	 * @param Pais del cual se desea realizar la sublisa, Pais!=null, Pais!=""
-	 * @return ILista<YoutubeVideo> 
-	 */
-	public ArregloDinamico<YoutubeVideo> sublistaPais(String pais){
+
+	public ArregloDinamico<YoutubeVideo> sublistaR1(ILista<YoutubeVideo> l, int c,String pais){
 		ArregloDinamico<YoutubeVideo> nueva = new ArregloDinamico<YoutubeVideo>();
-		for(int i=1; i<=datos.size(); i++){
-			if(datos.getElement(i).darPais().compareToIgnoreCase((pais))==0)
-				nueva.addLast(datos.getElement(i)); 
+		for(int i=1; i<=l.size(); i++){
+			if((l.getElement(i).darId_categoria()==c)&&(l.getElement(i).darPais().trim().compareToIgnoreCase((pais))==0))
+				nueva.addLast(l.getElement(i)); 
 		}
 		return nueva;
 	}
@@ -210,21 +207,25 @@ public class Modelo {
 		//Determinar el id de la categoria O(N) 
 		for(int i=1; i<=categorias.size()&&!stop;i++){
 			Categoria actual = categorias.getElement(i);
-			if(actual.darNombre().compareTo(categoria)==0){
+			System.out.println(actual.darNombre().compareToIgnoreCase(categoria));
+			if(actual.darNombre().compareToIgnoreCase(categoria)==0){
 				c = actual.darId();
 				stop = true;
 			}
 		}
+		if(c!=0){
+		//Arreglo con la lista de paises y categoria O(N)
+		ArregloDinamico<YoutubeVideo> p= sublistaR1(datos,c,pais);
 		
-		//Arreglo con la lista de paises
-		ArregloDinamico<YoutubeVideo> p= sublistaPais(pais);
 		Comparator<YoutubeVideo> comp = new YoutubeVideo.ComparadorXViews();
-		o.ordenarMerge(p, comp, false);
+		//Merge sort O(NlogN)
+		o.ordenarQuickSort(p, comp, false);
 		
 		//Resultado final
-		p = p.sublista(c);
+		p = p.sublista(num);
 		return p;
-		
+		}
+		return null;
 		
 	}
 
@@ -234,19 +235,40 @@ public class Modelo {
 	 * @param pais Pais donde son tendencia los videos. pais != null.
 	 * @return Como respuesta deben aparecer el video con mayor tendencia en el pais.  
 	 */
-    public ILista<YoutubeVideo> req2 (String pais){
-		int x = 0;
-				ArregloDinamico<YoutubeVideo> p = sublistaPais(pais);
-				for(int i=1; i<=p.size();i++){
-					for(int j=i+1; j<=p.size();j++){
-						
-					}
-				}
-				Comparator<YoutubeVideo> comp = new YoutubeVideo.ComparadorXViews();
-				o.ordenarMerge(p, comp, false);
-				p = p.sublista(x);
+    public String req2(String pais){
+    	//Lista de videos individuales
+		ArregloDinamico<YoutubeVideo> repetidos = new ArregloDinamico<YoutubeVideo>();
+		//Lista de videos del pais
+		ArregloDinamico<YoutubeVideo> listaPais = new ArregloDinamico<YoutubeVideo>();
+		int maximo = 0;
+		YoutubeVideo mayor = null;
+		//Acotar la lista grande a solo la categoria que nos interesa
+		for(int i=1; i<=datos.size(); i++){
+			YoutubeVideo actual = datos.getElement(i);
+			if(actual.darPais().trim().compareToIgnoreCase(pais)==0){
+				listaPais.addLast(actual);
+			}	
+		}
 		
-		return p;
+		int i= 1;
+		while(i<=listaPais.size()){
+			YoutubeVideo actual = listaPais.getElement(i);
+			repetidos.addLast(actual);
+			int eliminados = 1;
+			for(int j=i+1;j<=listaPais.size();j++){
+				if(actual.darVideoID().equals(listaPais.getElement(j).darVideoID())){
+					listaPais.deleteElement(j);
+					eliminados++;
+				}
+			}
+			listaPais.deleteElement(i);
+			if(eliminados>maximo){
+				maximo = eliminados;
+				mayor = actual;
+			}
+			i++;
+		}
+		return (mayor!=null)?" Titulo: "+mayor.darTitulo()+"\n Chanel_Title: "+mayor.darCanal()+"\n country: "+mayor.darPais()+" \n Dias: "+maximo:"";
 		
 	}
     
@@ -255,26 +277,66 @@ public class Modelo {
 	 * @param categoria Categoria especifica en la que estan los videos.
 	 * @return Como respuesta deben aparecer el video con mayor tendencia de la categoria.  
 	 */
-	public ILista<YoutubeVideo> req3 (String categoria){
+	public String req3 (String categoria){
 		int x = 0;
 		boolean z = false;
 		for(int i=1; i<=categorias.size()&&!z;i++){
 			Categoria actual = categorias.getElement(i);
-			if(actual.darNombre().compareTo(categoria)==0){
+			if(actual.darNombre().compareToIgnoreCase(categoria)==0){
 				x = actual.darId();
 				z = true;
 			}
 		}
-				
-				ArregloDinamico<YoutubeVideo> p = (ArregloDinamico<YoutubeVideo>) subLista(1);
-				
-				Comparator<YoutubeVideo> comp = new YoutubeVideo.ComparadorXViews();
-				o.ordenarMerge(p, comp, false);
-				//p = p.sublista(x);
-				return p;
 		
+		ArregloDinamico<YoutubeVideo> listaCategoria = new ArregloDinamico<>();
+		for(int i=1;i<=datos.size();i++){
+			if(datos.getElement(i).darId_categoria()==x){
+				listaCategoria.addLast(datos.getElement(i));
+			}
+		}
+		int maximo = 0;
+		YoutubeVideo mayor = null;
+		int i = 1;
+		while(i<=listaCategoria.size()){
+			YoutubeVideo actual = listaCategoria.getElement(i);
+			int eliminados = 1;
+			for(int j=i+1;j<=listaCategoria.size();j++){
+				if(actual.darVideoID().equals(listaCategoria.getElement(j).darVideoID())){
+					listaCategoria.deleteElement(j);
+					eliminados++;
+				}
+			}
+			listaCategoria.deleteElement(i);
+			if(eliminados>maximo){
+				maximo = eliminados;
+				mayor = actual;
+			}
+			i++;
+		}
+		return (mayor!=null)?" \n Title: "+mayor.darTitulo()+"\n channel_title: "+mayor.darCanal()+"\n category_Id: "+mayor.darId_categoria()+"\n Dias:"+maximo:"";
 	}
 	
+	
+	//Metodo obsoleto 
+	public ArregloDinamico<String> tags(YoutubeVideo y){
+		String[] tag = y.darTags().split("\\|");
+		ArregloDinamico<String> tags = new ArregloDinamico<String>();
+		for(int i=0; i<tag.length;i++){
+			//System.out.println(tag[i].replace("\"", ""));
+			tags.addLast(tag[i].replace("\"", "").trim());
+		}
+		return tags;
+	}
+	
+	public ArregloDinamico<YoutubeVideo> sublistaR4(ILista<YoutubeVideo> l, String tag, String pais){
+		ArregloDinamico<YoutubeVideo> nuevo = new ArregloDinamico<YoutubeVideo>();
+		for(int i=1;i<=l.size();i++){
+			YoutubeVideo a = l.getElement(i);
+			if((a.darPais().trim().compareToIgnoreCase(pais)==0&&a.darTags().contains(tag)))
+					nuevo.addLast(a);
+		}
+		return nuevo;
+	}
 	/**
 	 * Busca los n videos con mas views que son tendencia en un determinado pais y que posean la etiqueta designada.
 	 * @param pais Pais donde son tendencia los videos. pais != null
@@ -285,24 +347,11 @@ public class Modelo {
 	 */
 	public ILista<YoutubeVideo> req4(String pais, int num, String etiqueta) {
 		
-		int c = 0;
+		ArregloDinamico<YoutubeVideo> sub = sublistaR4(datos, etiqueta, pais);
+		Comparator<YoutubeVideo> comp = new YoutubeVideo.ComparadorXLikes();		
+		sub = (ArregloDinamico<YoutubeVideo>) o.ordenarQuickSort(sub, comp, false);
 		
-
-	    String[] x = null;
-	
-	    for(int i = 0; i < x.length; i++ ){
-		if(x[i].toLowerCase().contains(etiqueta.toLowerCase())){
-			
-		}
-		}
-		
-		ArregloDinamico<YoutubeVideo> p= sublistaPais(pais);
-		Comparator<YoutubeVideo> comp = new YoutubeVideo.ComparadorXViews();
-		o.ordenarMerge(p, comp, false);
-
-		p = p.sublista(c);
-		return p;
-		
+		return sub.sublista(num);
 	}
 	
 
