@@ -75,7 +75,7 @@ public class Controller {
 						String[] i = dato.split(",");
 						ILista<YoutubeVideo> r1 = modelo.req1(i[0].replace("-"," ").trim(),Integer.parseInt(i[1]),i[2].replace("-"," ").trim());
 						if(r1!=null)
-							view.imprimirVideo(r1,r1.size());
+							view.imprimirVideoReq1(r1,r1.size());
 					}
 					else if(dato.equals("2")){
 						view.printMessage("Ingrese un pais:");
@@ -93,11 +93,11 @@ public class Controller {
 						String[] i = dato.split(",");
 						ILista<YoutubeVideo> r1 = modelo.req4(i[0].replace("-"," ").trim(),Integer.parseInt(i[1]),i[2].replace("-"," ").trim());
 						if(r1!=null)
-							view.imprimirVideo(modelo.req4(i[0],Integer.parseInt(i[1]),i[2]),modelo.req4(i[0],Integer.parseInt(i[1]),i[2]).size());
+							view.imprimirVideoReq4(r1,r1.size());
 					}
 				break;
 
-				case 5: 
+				case 3: 
 					view.printMessage("--------- \n Hasta pronto !! \n---------"); 
 					lector.close();
 					fin = true;
