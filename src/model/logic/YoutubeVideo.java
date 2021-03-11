@@ -352,6 +352,7 @@ public class YoutubeVideo implements Comparable<YoutubeVideo>  {
 			 return video1.compareToLikes(video2);
 		 }
 	}
+
 	// Comparador alterno de acuerdo al número de views
 		 public static class ComparadorXViews implements Comparator<YoutubeVideo> {
 
@@ -364,4 +365,8 @@ public class YoutubeVideo implements Comparable<YoutubeVideo>  {
 				 return video1.compareToViews(video2);
 			 }
 		}
+
+	 
+
+
 }

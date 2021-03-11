@@ -52,9 +52,12 @@ public class View
 			System.out.println("Ultimos 10 elementos:");
 			for(int i=l.size();i>=(l.size()-10);i--){
 				System.out.println(l.getElement(i).darTitulo()+": "+l.getElement(i).darLikes());
+
 			}
 			System.out.println("===================================================================================");
-		}
+			}
+
+		
 		
 		public void printCategorias(Modelo modelo){
 			ILista<Categoria> l = modelo.darCategorias();

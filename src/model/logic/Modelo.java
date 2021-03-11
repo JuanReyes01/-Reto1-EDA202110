@@ -180,7 +180,7 @@ public class Modelo {
 		}
 		return categorias.getElement(elem);
 	}
-	
+
 	/**
 	 * Metodo que realiza una sublista de paises
 	 * @param Pais del cual se desea realizar la sublisa, Pais!=null, Pais!=""
@@ -194,7 +194,16 @@ public class Modelo {
 		}
 		return nueva;
 	}
-	
+
+
+	/**
+	 * Busca los n videos con mas views que son tendencia en un determinado pais, dada una categoria especifica.
+	 * @param pais Pais donde son tendencia los videos. pais != null
+	 * @param num Numero de videos que se desean ver. num > 0
+	 * @param categoria Categoria especifica en la que estan los videos.
+	 * @return Como respuesta deben aparecer los n videos que cumplen las caracteristicas y su respectiva informacion.  
+	 */
+
 	public ILista<YoutubeVideo> req1(String pais, int num, String categoria){
 		int c = 0;
 		boolean stop = false;
@@ -218,6 +227,85 @@ public class Modelo {
 		
 		
 	}
+
+	
+	/**
+	 * Busca el video que ha sido mas tendencia en un determinado pais.
+	 * @param pais Pais donde son tendencia los videos. pais != null.
+	 * @return Como respuesta deben aparecer el video con mayor tendencia en el pais.  
+	 */
+    public ILista<YoutubeVideo> req2 (String pais){
+		int x = 0;
+				ArregloDinamico<YoutubeVideo> p = sublistaPais(pais);
+				for(int i=1; i<=p.size();i++){
+					for(int j=i+1; j<=p.size();j++){
+						
+					}
+				}
+				Comparator<YoutubeVideo> comp = new YoutubeVideo.ComparadorXViews();
+				o.ordenarMerge(p, comp, false);
+				p = p.sublista(x);
+		
+		return p;
+		
+	}
+    
+    /**
+	 * Busca el video que ha sido mas tendencia en una categoria especifica.
+	 * @param categoria Categoria especifica en la que estan los videos.
+	 * @return Como respuesta deben aparecer el video con mayor tendencia de la categoria.  
+	 */
+	public ILista<YoutubeVideo> req3 (String categoria){
+		int x = 0;
+		boolean z = false;
+		for(int i=1; i<=categorias.size()&&!z;i++){
+			Categoria actual = categorias.getElement(i);
+			if(actual.darNombre().compareTo(categoria)==0){
+				x = actual.darId();
+				z = true;
+			}
+		}
+				
+				ArregloDinamico<YoutubeVideo> p = (ArregloDinamico<YoutubeVideo>) subLista(1);
+				
+				Comparator<YoutubeVideo> comp = new YoutubeVideo.ComparadorXViews();
+				o.ordenarMerge(p, comp, false);
+				//p = p.sublista(x);
+				return p;
+		
+	}
+	
+	/**
+	 * Busca los n videos con mas views que son tendencia en un determinado pais y que posean la etiqueta designada.
+	 * @param pais Pais donde son tendencia los videos. pais != null
+	 * @param num Numero de videos que se desean ver. num > 0
+	 * @param etiqueta Tag especifica que tienen los videos. != " " y != null
+	 * @return Como respuesta deben aparecer los n videos que cumplen las caracteristicas y su respectiva informacion.  
+	 * @throws FileNotFoundException 
+	 */
+	public ILista<YoutubeVideo> req4(String pais, int num, String etiqueta) {
+		
+		int c = 0;
+		
+
+	    String[] x = null;
+	
+	    for(int i = 0; i < x.length; i++ ){
+		if(x[i].toLowerCase().contains(etiqueta.toLowerCase())){
+			
+		}
+		}
+		
+		ArregloDinamico<YoutubeVideo> p= sublistaPais(pais);
+		Comparator<YoutubeVideo> comp = new YoutubeVideo.ComparadorXViews();
+		o.ordenarMerge(p, comp, false);
+
+		p = p.sublista(c);
+		return p;
+		
+	}
+	
+
 }
 
 
