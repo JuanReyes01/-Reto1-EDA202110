@@ -218,7 +218,7 @@ public class Modelo {
 		ArregloDinamico<YoutubeVideo> p= sublistaR1(datos,c,pais);
 		
 		Comparator<YoutubeVideo> comp = new YoutubeVideo.ComparadorXViews();
-		//Merge sort O(NlogN)
+		//Merge sort O(N^2)
 		o.ordenarQuickSort(p, comp, false);
 		
 		//Resultado final
@@ -240,7 +240,7 @@ public class Modelo {
 		ArregloDinamico<YoutubeVideo> listaPais = new ArregloDinamico<YoutubeVideo>();
 		int maximo = 0;
 		YoutubeVideo mayor = null;
-		//Acotar la lista grande a solo la categoria que nos interesa
+		//Acotar la lista grande a solo la categoria que nos interesa O(N) 
 		for(int i=1; i<=datos.size(); i++){
 			YoutubeVideo actual = datos.getElement(i);
 			if(actual.darPais().trim().compareToIgnoreCase(pais)==0){
@@ -248,6 +248,7 @@ public class Modelo {
 			}	
 		}
 		
+		//Eliminar a los videos repetidos y contar el número de eliminados O(N^2)
 		int i= 1;
 		while(i<=listaPais.size()){
 			YoutubeVideo actual = listaPais.getElement(i);
@@ -276,6 +277,7 @@ public class Modelo {
 	public String req3 (String categoria){
 		int x = 0;
 		boolean z = false;
+		//obtener categorias O(N)
 		for(int i=1; i<=categorias.size()&&!z;i++){
 			Categoria actual = categorias.getElement(i);
 			if(actual.darNombre().compareToIgnoreCase(categoria)==0){
@@ -284,6 +286,7 @@ public class Modelo {
 			}
 		}
 		
+		//Obtener lista de la categoria O(N) 
 		ArregloDinamico<YoutubeVideo> listaCategoria = new ArregloDinamico<>();
 		for(int i=1;i<=datos.size();i++){
 			if(datos.getElement(i).darId_categoria()==x){
@@ -293,6 +296,8 @@ public class Modelo {
 		int maximo = 0;
 		YoutubeVideo mayor = null;
 		int i = 1;
+		
+		//Eliminar repetidos y contar O(N^2) peor caso
 		while(i<=listaCategoria.size()){
 			YoutubeVideo actual = listaCategoria.getElement(i);
 			int eliminados = 1;
@@ -324,6 +329,7 @@ public class Modelo {
 		return tags;
 	}
 	
+	
 	public ArregloDinamico<YoutubeVideo> sublistaR4(ILista<YoutubeVideo> l, String tag, String pais){
 		ArregloDinamico<YoutubeVideo> nuevo = new ArregloDinamico<YoutubeVideo>();
 		for(int i=1;i<=l.size();i++){
@@ -339,13 +345,14 @@ public class Modelo {
 	 * @param pais Pais donde son tendencia los videos. pais != null
 	 * @param num Numero de videos que se desean ver. num > 0
 	 * @param etiqueta Tag especifica que tienen los videos. != " " y != null
-	 * @return Como respuesta deben aparecer los n videos que cumplen las caracteristicas y su respectiva informacion.  
-	 * @throws FileNotFoundException 
+	 * @return Como respuesta deben aparecer los n videos que cumplen las caracteristicas y su respectiva informacion.  	
 	 */
 	public ILista<YoutubeVideo> req4(String pais, int num, String etiqueta) {
 		
+		//sublista con los videos con la etiqueta y pais O(N)
 		ArregloDinamico<YoutubeVideo> sub = sublistaR4(datos, etiqueta, pais);
-		Comparator<YoutubeVideo> comp = new YoutubeVideo.ComparadorXLikes();		
+		Comparator<YoutubeVideo> comp = new YoutubeVideo.ComparadorXLikes();	
+		//Ordenamiento quickSort O(N^2) en el peor caso
 		sub = (ArregloDinamico<YoutubeVideo>) o.ordenarQuickSort(sub, comp, false);
 		
 		return sub.sublista(num);
