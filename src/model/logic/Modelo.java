@@ -153,6 +153,7 @@ public class Modelo {
 		categorias.addLast(elem);
 	}
 	
+	//Busqueda binaria, para practicar
 	/**
 	 * Metodo que sobreescribe la busqueda que realiza arreglo dinamico con una busqueda binaria
 	 * Esto es posible porque la lista de categorias esta ordenada desde que se carga 
@@ -207,7 +208,6 @@ public class Modelo {
 		//Determinar el id de la categoria O(N) 
 		for(int i=1; i<=categorias.size()&&!stop;i++){
 			Categoria actual = categorias.getElement(i);
-			System.out.println(actual.darNombre().compareToIgnoreCase(categoria));
 			if(actual.darNombre().compareToIgnoreCase(categoria)==0){
 				c = actual.darId();
 				stop = true;
@@ -235,9 +235,7 @@ public class Modelo {
 	 * @param pais Pais donde son tendencia los videos. pais != null.
 	 * @return Como respuesta deben aparecer el video con mayor tendencia en el pais.  
 	 */
-    public String req2(String pais){
-    	//Lista de videos individuales
-		ArregloDinamico<YoutubeVideo> repetidos = new ArregloDinamico<YoutubeVideo>();
+    public String req2(String pais){    
 		//Lista de videos del pais
 		ArregloDinamico<YoutubeVideo> listaPais = new ArregloDinamico<YoutubeVideo>();
 		int maximo = 0;
@@ -253,7 +251,6 @@ public class Modelo {
 		int i= 1;
 		while(i<=listaPais.size()){
 			YoutubeVideo actual = listaPais.getElement(i);
-			repetidos.addLast(actual);
 			int eliminados = 1;
 			for(int j=i+1;j<=listaPais.size();j++){
 				if(actual.darVideoID().equals(listaPais.getElement(j).darVideoID())){
@@ -261,7 +258,6 @@ public class Modelo {
 					eliminados++;
 				}
 			}
-			listaPais.deleteElement(i);
 			if(eliminados>maximo){
 				maximo = eliminados;
 				mayor = actual;
@@ -317,7 +313,7 @@ public class Modelo {
 	}
 	
 	
-	//Metodo obsoleto 
+	//Metodo obsoleto, sirve a futuro 
 	public ArregloDinamico<String> tags(YoutubeVideo y){
 		String[] tag = y.darTags().split("\\|");
 		ArregloDinamico<String> tags = new ArregloDinamico<String>();
@@ -337,6 +333,7 @@ public class Modelo {
 		}
 		return nuevo;
 	}
+	
 	/**
 	 * Busca los n videos con mas views que son tendencia en un determinado pais y que posean la etiqueta designada.
 	 * @param pais Pais donde son tendencia los videos. pais != null

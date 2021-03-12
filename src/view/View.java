@@ -75,7 +75,7 @@ public class View
 				System.out.println(" views: "+a.darViews());
 				System.out.println(" likes: "+a.darLikes());
 				System.out.println(" dislikes: "+a.darDislikes());
-				System.out.println(" tags: "+a.darTags());
+				System.out.println(" tags: "+a.darTags());			
 			}
 			System.out.println("=====================================");
 		}
